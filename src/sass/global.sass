@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap')
+@import './variables'
+
+*
+    font-family: "Figtree", sans-serif
+    margin: 0
+    padding: 0
+
+button
+    background-color: $normalBlue
+    border: none
+    border-radius: 15px
+    color: $white
+    cursor: pointer
+    font-size: 1em
+    padding: 10px
+    &:hover
+        background-color: $lightBlue
+        transition: 0.3s
+
+.register-login-container
+    display: flex
+    justify-content: center
+    align-items: center
+    width: 100vw
+    height: 100vh
+    background: linear-gradient(45deg, $white 25%, $lightBlue 100%)
+    color: $darkBlue
+    form
+        display: flex
+        flex-direction: column
+        gap: 15px
+        border: 2px solid $normalBlue
+        border-radius: 20px
+        box-shadow: 0px 0px 20px -5px $normalBlue
+        padding: 25px
+        margin: 25px
+        min-width: 20vw
+        h1
+            text-align: center
