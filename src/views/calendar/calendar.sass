@@ -1,0 +1,23 @@
+@import 'src/sass/variables'
+
+.calendar-section 
+    display: flex
+    flex-direction: row
+    color: $darkBlue
+    .calendar-container
+        padding: 50px
+        width: 100%
+        .calendar-month
+            display: flex
+            justify-content: center
+            align-items: center
+            gap: 10px
+            margin-bottom: 30px
+            h1
+                cursor: pointer
+        .calendar-days
+            display: grid
+            grid-template-columns: repeat(7, auto)
+            grid-template-rows: repeat(5, 150px)
+            border: 2px solid $normalBlue
+            border-radius: 25px

@@ -41,7 +41,7 @@ export const Register: FC = () => {
         />
         <FormInput
           forId="repeatPassword"
-          title="Password"
+          title="Repeat password"
           type="password"
           updateValue={updateValue}
         />

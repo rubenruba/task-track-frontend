@@ -1,0 +1,17 @@
+@import 'src/sass/variables'
+
+.calendar-day 
+    background-color: $white
+    border: 1px solid $normalBlue
+    cursor: pointer
+    padding: 10px
+    &:nth-child(1)
+        border-radius: 22px 0 0 0
+    &:nth-child(7)
+        border-radius: 0 22px 0 0
+    &:nth-child(29)
+        border-radius: 0 0 0 22px
+    &:nth-child(35)
+        border-radius: 0 0 22px 0
+    &:hover
+        background-color: #e0f4ff
