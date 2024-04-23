@@ -10,7 +10,6 @@ import './calendar.sass';
 
 export const Calendar: FC = () => {
     const [date, setDate] = useState<Date>(new Date());
-    const [month, setMonth] = useState<number>(date.getMonth());
     const [days, setDays] = useState<Array<number>>([])
 
     useEffect(() => {
@@ -26,7 +25,6 @@ export const Calendar: FC = () => {
         }
 
         setDays(newDays);
-        setMonth(date.getMonth());
         console.log(date);
     }, [date]);
 
@@ -46,17 +44,16 @@ export const Calendar: FC = () => {
                     <IconButton onClick={previousMonth} size="small" style={{ color: '#014B7A' }}>
                         <ChevronLeftIcon/>
                     </IconButton>
-                    <div>
-                        <h1>{getMonthString(date) + ' ' + date.getFullYear()}</h1>
-                        <DatePickerCustom></DatePickerCustom>
-                    </div>
+
+                    <DatePickerCustom date={date} onchange={(value: Date) => setDate(value)} />
+
                     <IconButton onClick={nextMonth} size="small" style={{ color: '#014B7A' }}>
                         <ChevronRightIcon />
                     </IconButton>
                 </div>
                 <div className="calendar-days">
                     {days.length > 0 && days.map((day, idx) => {
-                        return <CalendarDayComponent props={{day: day, index: idx}}/>
+                        return <CalendarDayComponent props={{day: day, index: idx, date: new Date(date.getFullYear(), date.getMonth(), day)}}/>
                     })}
                 </div>
             </div>
