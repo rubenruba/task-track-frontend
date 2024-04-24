@@ -1,14 +1,13 @@
 import { FC, useState } from "react";
-import { Modal } from "@mui/material";
+import { CalendarDayModal } from "../../views/calendarDayModal/calendarDayModal";
 import "./calendarDay.sass";
 
 interface CalendarDayProps {
   day: number;
-  index: number;
   date: Date;
 }
 
-export const CalendarDayComponent: FC<{ props: CalendarDayProps }> = ({ props }) => {
+export const CalendarDayComponent: FC<CalendarDayProps> = ({ day, date }) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const handleClose = () => {
@@ -18,14 +17,10 @@ export const CalendarDayComponent: FC<{ props: CalendarDayProps }> = ({ props })
   return (
     <>
       <div className="calendar-day" onClick={() => setOpen(true)}>
-        <p>{props.day !== 0 && props.day}</p>
+        <p>{day !== 0 && day}</p>
       </div>
 
-      <Modal open={open} onClose={handleClose}>
-        <div className="calendar-day-modal">
-            <h2>{props.date.toString()}</h2>
-        </div>
-      </Modal>
+      <CalendarDayModal date={date} open={open} handleClose={handleClose}/>
     </>
   );
 };

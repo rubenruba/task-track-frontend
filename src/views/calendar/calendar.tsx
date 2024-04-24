@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { MenuComponent } from "../../components/menu/menu";
 import { CalendarDayComponent } from "../../components/calendarDay/calendarDay";
-import { getMonthString } from "../../utils/getMonthString";
 import { IconButton } from "@mui/material";
 import { DatePickerCustom } from "../../components/datePicker/datePicker";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -52,8 +51,8 @@ export const Calendar: FC = () => {
                     </IconButton>
                 </div>
                 <div className="calendar-days">
-                    {days.length > 0 && days.map((day, idx) => {
-                        return <CalendarDayComponent props={{day: day, index: idx, date: new Date(date.getFullYear(), date.getMonth(), day)}}/>
+                    {days.length > 0 && days.map((day) => {
+                        return <CalendarDayComponent day={day} date={new Date(date.getFullYear(), date.getMonth(), day)}/>
                     })}
                 </div>
             </div>
