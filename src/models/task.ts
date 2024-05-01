@@ -3,5 +3,5 @@ export interface TaskModel {
   date: string;
   text: string;
   completed: boolean;
-  user: string[];
+  users: string[];
 }

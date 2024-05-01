@@ -22,9 +22,9 @@ export const CalendarDayModal: FC<ModalProps> = ({ date, open, handleClose }) =>
     if (inputValue !== "") {
       const newTask = {
         id: nanoid(),
-        date: momentDate.format("DD-MM-YYYY"),
+        date: momentDate.format("YYYY-MM-DD"),
         text: inputValue,
-        user: [], // TO DO - Add current user id
+        users: [], // TO DO - Add current user id
         completed: false,
       };
       setTasks([...tasks, newTask]);
