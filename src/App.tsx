@@ -1,16 +1,33 @@
 import { FC } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { UserService } from "./services/UserService";
+import { Calendar } from "./views/calendar/calendar";
 import { Login } from "./views/login/login";
 import { Register } from "./views/register/register";
-import { Calendar } from "./views/calendar/calendar";
 
 export const App: FC = () => {
+  const userService = new UserService();
+  const userToken = userService.getCurrentUser();
+
   return (
     <Routes>
       <Route path="/" element={""} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/calendar" element={<Calendar />} />
+      {/* TO DO - Not found page */}
+      <Route path="/404" element={""} />
+      <Route path="*" element={<Navigate replace to="/404" />} />
+
+      {!userToken && (
+        <>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </>
+      )}
+
+      {userToken?.user && (
+        <>
+          <Route path="/calendar" element={<Calendar />} />
+        </>
+      )}
     </Routes>
   );
 };

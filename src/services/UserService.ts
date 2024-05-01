@@ -9,14 +9,14 @@ export class UserService {
   }
 
   private async authenticate(url: string, data: UserLogin | UserRegister) {
-    const userToken = await axios.post(url, data) as UserToken;
+    const userToken = (await axios.post(url, data)).data as  UserToken;
     if (!userToken) return;
     this.saveUser(userToken);
     window.location.href = "/calendar";
   }
 
   private async getUserBy(url: string) {
-    const userToken = this.getUser();
+    const userToken = this.getCurrentUser();
     if (!userToken) return null;
     const user = await axios.get(url, {
       headers: { Authorization: userToken.token },
@@ -28,7 +28,7 @@ export class UserService {
     this.authenticate(`${this.baseURL}/login`, user);
   }
 
-  public createUser(user: UserRegister) {
+  public register(user: UserRegister) {
     this.authenticate(`${this.baseURL}/register`, user);
   }
 
@@ -41,7 +41,7 @@ export class UserService {
   }
 
   public async getAllUsers() {
-    const userToken = this.getUser();
+    const userToken = this.getCurrentUser();
     if (!userToken || userToken?.user.admin === false) return null;
     const users = await axios.get(`${this.baseURL}/all`, {
       headers: { Authorization: userToken.token },
@@ -55,7 +55,7 @@ export class UserService {
   }
 
   public async deleteUser(userId: string) {
-    const userToken = this.getUser();
+    const userToken = this.getCurrentUser();
     if (!userToken || userToken?.user.admin === false) return;
     await axios.delete(`${this.baseURL}/delete/${userId}`, {
       headers: { Authorization: userToken.token },
@@ -63,7 +63,7 @@ export class UserService {
   }
 
   public async updateUser(user: UserMinimal) {
-    const userToken = this.getUser();
+    const userToken = this.getCurrentUser();
     if (!userToken) return;
     await axios.put(`${this.baseURL}/edit`, user, {
       headers: { Authorization: userToken.token },
@@ -74,7 +74,7 @@ export class UserService {
     localStorage.setItem("user", JSON.stringify(user));
   }
 
-  public getUser(): UserToken | null {
+  public getCurrentUser(): UserToken | null {
     const user = localStorage.getItem("user");
     if (!user) return null;
     return JSON.parse(user);

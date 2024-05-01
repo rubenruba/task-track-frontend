@@ -1,8 +1,11 @@
-import { FC, useState } from "react";
-import { FormInput } from "../../components/formInput/formInput";
+import { FC, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
+import { FormInput } from "../../components/formInput/formInput";
+import { UserRegister } from "../../models/user";
+import { UserService } from "../../services/UserService";
 
 export const Register: FC = () => {
+  const userService = new UserService();
   const [value, setValue] = useState({
     username: "",
     email: "",
@@ -16,6 +19,17 @@ export const Register: FC = () => {
       [prop]: value,
     }));
   };
+
+  const registerAction = (e: FormEvent) => {
+    e.preventDefault();
+    if (value.password !== value.repeatPassword) return;
+    const user: UserRegister = {
+      username: value.username,
+      email: value.email,
+      password: value.password,
+    }
+    userService.register(user);
+  }
 
   return (
     <div className="register-login-container">
@@ -46,7 +60,7 @@ export const Register: FC = () => {
           updateValue={updateValue}
         />
         <Link to="/login">Already have an account? Login now</Link>
-        <button>Register</button>
+        <button onClick={(e) => registerAction(e)}>Register</button>
       </form>
     </div>
   );
