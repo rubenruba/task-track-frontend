@@ -1,10 +1,5 @@
 import axios from "axios";
-import {
-  UserLogin,
-  UserMinimal,
-  UserRegister,
-  UserToken,
-} from "../models/user";
+import { UserLogin, UserMinimal, UserRegister, UserToken } from "../models/user";
 
 export class UserService {
   private baseURL;
