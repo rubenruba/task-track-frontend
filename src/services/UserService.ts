@@ -33,7 +33,7 @@ export class UserService {
   }
 
   public getUserById(userId: string) {
-    return this.getUserBy(`${this.baseURL}/userId/${userId}`);
+    return this.getUserBy(`${this.baseURL}/${userId}`);
   }
 
   public getUserByEmail(email: string) {
@@ -57,7 +57,7 @@ export class UserService {
   public async deleteUser(userId: string) {
     const userToken = this.getCurrentUser();
     if (!userToken || userToken?.user.admin === false) return;
-    await axios.delete(`${this.baseURL}/delete/${userId}`, {
+    await axios.delete(`${this.baseURL}/${userId}`, {
       headers: { Authorization: userToken.token },
     });
   }
@@ -65,7 +65,7 @@ export class UserService {
   public async updateUser(user: UserMinimal) {
     const userToken = this.getCurrentUser();
     if (!userToken) return;
-    await axios.put(`${this.baseURL}/edit`, user, {
+    await axios.put(this.baseURL, user, {
       headers: { Authorization: userToken.token },
     });
   }
