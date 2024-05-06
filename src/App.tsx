@@ -11,7 +11,7 @@ export const App: FC = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate replace to="/calendar" />} />
+      <Route path="/" element={<Login />} />
       {/* TO DO - Not found page */}
       <Route path="/404" element={""} />
       <Route path="*" element={<Navigate replace to="/404" />} />
