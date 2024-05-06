@@ -11,7 +11,7 @@ export const App: FC = () => {
 
   return (
     <Routes>
-      <Route path="/" element={""} />
+      <Route path="/" element={<Navigate replace to="/calendar" />} />
       {/* TO DO - Not found page */}
       <Route path="/404" element={""} />
       <Route path="*" element={<Navigate replace to="/404" />} />
@@ -25,7 +25,7 @@ export const App: FC = () => {
 
       {userToken?.user && (
         <>
-          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/calendar" element={<Calendar user={userToken.user} />} />
         </>
       )}
     </Routes>

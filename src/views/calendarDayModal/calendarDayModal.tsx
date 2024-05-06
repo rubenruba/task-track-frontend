@@ -1,50 +1,51 @@
-import { IconButton, Modal } from "@mui/material";
-import { FC, useState } from "react";
-import { TaskModel } from "../../models/task";
-import { nanoid } from "nanoid";
-import { CalendarDayTask } from "../../components/calendarDayTask/calendarDayTask";
-import moment from "moment";
 import AddIcon from "@mui/icons-material/Add";
+import { IconButton, Modal } from "@mui/material";
+import moment from "moment";
+import { nanoid } from "nanoid";
+import { FC, useEffect, useMemo, useState } from "react";
+import { CalendarDayTask } from "../../components/calendarDayTask/calendarDayTask";
+import { TaskModel } from "../../models/task";
+import { TaskService } from "../../services/TaskService";
 import "./calendarDayModal.sass";
+import { UserMinimal } from "../../models/user";
 
 interface ModalProps {
-  date: Date;
+  date: string;
   open: boolean;
   handleClose: Function;
+  user: UserMinimal;
+  tasks: TaskModel[];
 }
 
-export const CalendarDayModal: FC<ModalProps> = ({ date, open, handleClose }) => {
-  const [tasks, setTasks] = useState<TaskModel[]>([]);
+export const CalendarDayModal: FC<ModalProps> = ({ date, open, handleClose, user, tasks }) => {
+  const taskService = new TaskService();
   const [add, setAdd] = useState(false);
   const momentDate = moment(date);
 
-  const addTask = (inputValue: string) => {
+  const addTask = async (inputValue: string) => {
     if (inputValue !== "") {
       const newTask = {
         id: nanoid(),
         date: momentDate.format("YYYY-MM-DD"),
         text: inputValue,
-        users: [], // TO DO - Add current user id
+        users: [user.id],
         completed: false,
       };
-      setTasks([...tasks, newTask]);
+      tasks.push(newTask);
+      await taskService.createTask(newTask);
     }
-
     setAdd(false);
   };
 
   const deleteTask = (task: TaskModel) => {
-    const newTasks = tasks.filter((t) => t.id !== task.id);
-    setTasks(newTasks);
+    tasks.filter((t) => t.id !== task.id);
   };
 
   const setCompleted = (task: TaskModel) => {
-    const newTasks = tasks.map((t) => {
+    tasks.map((t) => {
       if (t.id === task.id) task.completed = !task.completed;
-
       return t;
     });
-    setTasks(newTasks);
   };
 
   return (

@@ -1,14 +1,28 @@
-import { FC, useState } from "react";
+import moment, { Moment } from "moment";
+import { FC, useEffect, useState } from "react";
+import { TaskModel } from "../../models/task";
+import { UserMinimal } from "../../models/user";
 import { CalendarDayModal } from "../../views/calendarDayModal/calendarDayModal";
 import "./calendarDay.sass";
 
 interface CalendarDayProps {
-  day: number;
-  date: Date;
+  date: string;
+  user: UserMinimal;
+  tasks: TaskModel[];
 }
 
-export const CalendarDayComponent: FC<CalendarDayProps> = ({ day, date }) => {
+export const CalendarDayComponent: FC<CalendarDayProps> = ({ date, user, tasks }) => {
+  const [momentDate, setMomentDate] = useState<Moment | null>(moment(date));
   const [open, setOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (date === 'Invalid date') setMomentDate(null); // To not see NaN in screnn
+    else setMomentDate(moment(date));
+  }, [date]);
+
+  const handleOpen = () => {
+    if (momentDate !== null) setOpen(true);
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -16,11 +30,16 @@ export const CalendarDayComponent: FC<CalendarDayProps> = ({ day, date }) => {
 
   return (
     <>
-      <div className="calendar-day" onClick={() => setOpen(true)}>
-        <p>{day !== 0 && day}</p>
+      <div className="calendar-day" onClick={handleOpen}>
+        <p>{momentDate?.date()}</p>
+        {tasks.map((task, index) => {
+          if (index < 3) return <p className="calendar-day-task">{task.text}</p>
+          else if (index === tasks.length - 1) return <p style={{ textAlign: 'center' }}>...</p>;
+          return '';
+        })}
       </div>
 
-      <CalendarDayModal date={date} open={open} handleClose={handleClose}/>
+      <CalendarDayModal date={date} open={open} handleClose={handleClose} user={user} tasks={tasks} />
     </>
   );
 };

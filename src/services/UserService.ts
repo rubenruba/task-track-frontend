@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { UserLogin, UserMinimal, UserRegister, UserToken } from "../models/user";
 
 export class UserService {
@@ -16,12 +16,16 @@ export class UserService {
   }
 
   private async getUserBy(url: string) {
-    const userToken = this.getCurrentUser();
-    if (!userToken) return null;
-    const user = await axios.get(url, {
-      headers: { Authorization: userToken.token },
-    }) as UserMinimal;
-    return user;
+    try {
+      const userToken = this.getCurrentUser();
+      if (!userToken) return null;
+      const user = await axios.get(url, {
+        headers: { Authorization: userToken.token },
+      }) as UserMinimal;
+      return user;
+    } catch (err) {
+
+    }
   }
 
   public login(user: UserLogin) {
@@ -82,5 +86,10 @@ export class UserService {
 
   public logout() {
     localStorage.removeItem("user");
+    window.location.href = '/login';
+  }
+
+  public unauthorized(err: AxiosError) {
+    if (err.response?.status === 401) this.logout();
   }
 }

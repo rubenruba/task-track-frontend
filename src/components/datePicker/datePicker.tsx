@@ -55,7 +55,7 @@ const ButtonDatePicker = (props: Omit<DatePickerProps<Moment>, "open" | "onOpen"
   );
 }
 
-export const DatePickerCustom: FC<{ date: Date, onchange: Function }> = ({ date, onchange }) => {
+export const DatePickerCustom: FC<{ date: string, onchange: Function }> = ({ date, onchange }) => {
   const [value, setValue] = useState<Moment | null>(moment);
 
   useEffect(() => setValue(moment(date)), [date]);

@@ -1,38 +1,52 @@
-import { FC, useEffect, useState } from "react";
-import { MenuComponent } from "../../components/menu/menu";
-import { CalendarDayComponent } from "../../components/calendarDay/calendarDay";
-import { IconButton } from "@mui/material";
-import { DatePickerCustom } from "../../components/datePicker/datePicker";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { IconButton } from "@mui/material";
+import moment from 'moment';
+import { FC, useEffect, useState } from "react";
+import { CalendarDayComponent } from "../../components/calendarDay/calendarDay";
+import { DatePickerCustom } from "../../components/datePicker/datePicker";
+import { MenuComponent } from "../../components/menu/menu";
+import { TaskModel } from '../../models/task';
+import { UserMinimal } from '../../models/user';
+import { TaskService } from '../../services/TaskService';
 import './calendar.sass';
 
-export const Calendar: FC = () => {
-    const [date, setDate] = useState<Date>(new Date());
-    const [days, setDays] = useState<Array<number>>([])
+export const Calendar: FC<{ user: UserMinimal}> = ({ user }) => {
+    const taskService = new TaskService();
+    const [momentDate, setMonthDate] = useState(moment());
+    const [days, setDays] = useState<Array<number>>([]);
+    const [monthTasks, setMonthTasks] = useState<TaskModel[]>([]);
 
     useEffect(() => {
-        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        const getTasks = async () => {
+            const tasks = user?.id ? await taskService.getTaskByUserIdAndDate(user.id, momentDate.format('YYYY-MM')) : null;
+            setMonthTasks(tasks ?? []);
+        }
+        getTasks();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [momentDate]);
+
+    useEffect(() => {
+        const firstDay = moment(momentDate).startOf('month');
+        const lastDay = moment(momentDate).endOf('month');
         const newDays = [];
-        let day = firstDay.getDate();
+        let day = firstDay.get('date');
 
         for(let i = 1; i <= 35; i++) {
-            if(firstDay.getDay() > i) newDays.push(0);
-            else if(lastDay.getDate() < day) newDays.push(0);
+            if(firstDay.get('d') > i) newDays.push(0);
+            else if(lastDay.get('date') < day) newDays.push(0);
             else newDays.push(day++);
         }
 
         setDays(newDays);
-        console.log(date);
-    }, [date]);
+    }, [momentDate]);
 
     const nextMonth = () => {
-        setDate(new Date(date.setMonth(date.getMonth() + 1)));
+        setMonthDate(moment(momentDate).add(1, 'month'));
     }
 
     const previousMonth = () => {
-        setDate(new Date(date.setMonth(date.getMonth() - 1)));
+        setMonthDate(moment(momentDate).subtract(1, 'month'));
     }
 
     return (
@@ -44,7 +58,7 @@ export const Calendar: FC = () => {
                         <ChevronLeftIcon/>
                     </IconButton>
 
-                    <DatePickerCustom date={date} onchange={(value: Date) => setDate(value)} />
+                    <DatePickerCustom date={moment(momentDate).format('YYYY-MM-DD')} onchange={(value: string) => setMonthDate(moment(value))} />
 
                     <IconButton onClick={nextMonth} size="small" style={{ color: '#014B7A' }}>
                         <ChevronRightIcon />
@@ -52,7 +66,14 @@ export const Calendar: FC = () => {
                 </div>
                 <div className="calendar-days">
                     {days.length > 0 && days.map((day) => {
-                        return <CalendarDayComponent day={day} date={new Date(date.getFullYear(), date.getMonth(), day)}/>
+                        const dayDate = moment(`${day}-${momentDate.month() + 1}-${momentDate.year()}`, "DD-MM-YYYY").format('YYYY-MM-DD');
+                        return (
+                            <CalendarDayComponent 
+                               date={dayDate} 
+                               user={user} 
+                               tasks={monthTasks.filter(t => t.date === dayDate)}
+                            />
+                        ) 
                     })}
                 </div>
             </div>

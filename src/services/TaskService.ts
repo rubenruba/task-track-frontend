@@ -1,6 +1,6 @@
-import axios from "axios";
-import { UserService } from "./UserService";
+import axios, { AxiosError } from "axios";
 import { TaskModel } from "../models/task";
+import { UserService } from "./UserService";
 
 export class TaskService {
   private userService = new UserService();
@@ -14,12 +14,16 @@ export class TaskService {
     this.token = this.userService.getCurrentUser()?.token;
   }
 
-  private async getTasks(url: string) {
-    if (!this.token || !this.user) return null; 
-    const tasks = await axios.get(url, {
-        headers: { Authorization: this.token }
-    }) as TaskModel[];
-    return tasks;
+  private async getTasks(url: string): Promise<TaskModel[] | void> {
+    try {
+      if (!this.token || !this.user) return; 
+      const tasks = await axios.get(url, {
+          headers: { Authorization: this.token }
+      });
+      return tasks.data as TaskModel[];
+    } catch (err) {
+      this.userService.unauthorized(err as AxiosError);
+    }
   } 
 
   public async getTaskById(taskId: string) {
@@ -35,23 +39,37 @@ export class TaskService {
   }
 
   public async createTask(task: TaskModel) {
-    if (!this.token || !this.user) return;
-    await axios.post(this.baseURL, task, {
-      headers: { Authorization: this.token },
-    });
+    try {
+      if (!this.token || !this.user) return;
+      await axios.post(this.baseURL, task, {
+        headers: { Authorization: this.token },
+      });
+    } catch (err) {
+      this.userService.unauthorized(err as AxiosError);
+    }
   }
 
   public async deleteTask(task: TaskModel) {
-    if (!this.token || !this.user || !task.users.includes(this.user.id)) return;
-    await axios.delete(`${this.baseURL}/${task.id}`, {
-      headers: { Authorization: this.token },
-    });
+    try {
+      if (!this.token || !this.user || !task.users.includes(this.user.id)) return;
+      await axios.delete(`${this.baseURL}/${task.id}`, {
+        headers: { Authorization: this.token },
+      });
+    } catch (err) {
+      this.userService.unauthorized(err as AxiosError);
+    }
   }
 
   public async update(task: TaskModel) {
-    if (!this.token || !this.user || !task.users.includes(this.user.id)) return;
-    await axios.put(this.baseURL, task, {
-      headers: { Authorization: this.token },
-    });
+    try {
+      if (!this.token || !this.user || !task.users.includes(this.user.id)) return;
+      await axios.put(this.baseURL, task, {
+        headers: { Authorization: this.token },
+      });
+    } catch (err) {
+      this.userService.unauthorized(err as AxiosError);
+    }
   }
+
+
 }
