@@ -18,27 +18,25 @@ export const Calendar: FC<{ user: UserMinimal}> = ({ user }) => {
     const [monthTasks, setMonthTasks] = useState<TaskModel[]>([]);
 
     useEffect(() => {
-        const getTasks = async () => {
-            const tasks = user?.id ? await taskService.getTaskByUserIdAndDate(user.id, momentDate.format('YYYY-MM')) : null;
-            setMonthTasks(tasks ?? []);
-        }
-        getTasks();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [momentDate]);
-
-    useEffect(() => {
         const firstDay = moment(momentDate).startOf('month');
         const lastDay = moment(momentDate).endOf('month');
         const newDays = [];
         let day = firstDay.get('date');
-
+        
         for(let i = 1; i <= 35; i++) {
             if(firstDay.get('d') > i) newDays.push(0);
             else if(lastDay.get('date') < day) newDays.push(0);
             else newDays.push(day++);
         }
+        
+        const getTasks = async () => {
+            const tasks = user?.id ? await taskService.getTaskByUserIdAndDate(user.id, momentDate.format('YYYY-MM')) : null;
+            setMonthTasks(tasks ?? []);
+        }
+        getTasks();
 
         setDays(newDays);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [momentDate]);
 
     const nextMonth = () => {
@@ -72,8 +70,9 @@ export const Calendar: FC<{ user: UserMinimal}> = ({ user }) => {
                                date={dayDate} 
                                user={user} 
                                tasks={monthTasks.filter(t => t.date === dayDate)}
+                               setTasks={setMonthTasks}
                             />
-                        ) 
+                        ); 
                     })}
                 </div>
             </div>

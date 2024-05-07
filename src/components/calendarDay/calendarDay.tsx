@@ -9,9 +9,10 @@ interface CalendarDayProps {
   date: string;
   user: UserMinimal;
   tasks: TaskModel[];
+  setTasks: Function;
 }
 
-export const CalendarDayComponent: FC<CalendarDayProps> = ({ date, user, tasks }) => {
+export const CalendarDayComponent: FC<CalendarDayProps> = ({ date, user, tasks, setTasks }) => {
   const [momentDate, setMomentDate] = useState<Moment | null>(moment(date));
   const [open, setOpen] = useState<boolean>(false);
 
@@ -39,7 +40,14 @@ export const CalendarDayComponent: FC<CalendarDayProps> = ({ date, user, tasks }
         })}
       </div>
 
-      <CalendarDayModal date={date} open={open} handleClose={handleClose} user={user} tasks={tasks} />
+      <CalendarDayModal 
+        user={user} 
+        date={date} 
+        open={open} 
+        handleClose={handleClose} 
+        tasks={tasks}
+        setTasks={setTasks} 
+      />
     </>
   );
 };

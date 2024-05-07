@@ -7,7 +7,7 @@ export const MenuComponent: FC = () => {
     return (
         <nav>
             <div>
-                <img src="" alt="" /> 
+                <img src={require('../../assets/logo.png')} alt="logo" /> 
                 <ul>
                     <li><Link to='/calendar'>Calendar</Link></li>
                     <li><Link to='/login'>Login</Link></li>

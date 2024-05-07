@@ -2,12 +2,12 @@ import AddIcon from "@mui/icons-material/Add";
 import { IconButton, Modal } from "@mui/material";
 import moment from "moment";
 import { nanoid } from "nanoid";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useState } from "react";
 import { CalendarDayTask } from "../../components/calendarDayTask/calendarDayTask";
 import { TaskModel } from "../../models/task";
+import { UserMinimal } from "../../models/user";
 import { TaskService } from "../../services/TaskService";
 import "./calendarDayModal.sass";
-import { UserMinimal } from "../../models/user";
 
 interface ModalProps {
   date: string;
@@ -15,9 +15,10 @@ interface ModalProps {
   handleClose: Function;
   user: UserMinimal;
   tasks: TaskModel[];
+  setTasks: Function;
 }
 
-export const CalendarDayModal: FC<ModalProps> = ({ date, open, handleClose, user, tasks }) => {
+export const CalendarDayModal: FC<ModalProps> = ({ date, open, handleClose, user, tasks, setTasks }) => {
   const taskService = new TaskService();
   const [add, setAdd] = useState(false);
   const momentDate = moment(date);
@@ -32,19 +33,27 @@ export const CalendarDayModal: FC<ModalProps> = ({ date, open, handleClose, user
         completed: false,
       };
       tasks.push(newTask);
+      setTasks((prev: TaskModel[]) => {
+        prev.push(newTask);
+        return prev;
+      });
       await taskService.createTask(newTask);
     }
     setAdd(false);
   };
 
   const deleteTask = (task: TaskModel) => {
-    tasks.filter((t) => t.id !== task.id);
+    setTasks((prev: TaskModel[]) => {
+      return prev.filter((t) => t.id !== task.id);
+    })
   };
 
-  const setCompleted = (task: TaskModel) => {
-    tasks.map((t) => {
-      if (t.id === task.id) task.completed = !task.completed;
-      return t;
+  const editTask = (task: TaskModel) => {
+    setTasks((prev: TaskModel[]) => {
+      return prev.map((t) => {
+        if (t.id === task.id) t = task;
+        return t;
+      });
     });
   };
 
@@ -57,7 +66,7 @@ export const CalendarDayModal: FC<ModalProps> = ({ date, open, handleClose, user
             return (
               <CalendarDayTask
                 task={task}
-                setCompleted={setCompleted}
+                editTask={editTask}
                 deleteTask={deleteTask}
               />
             );
