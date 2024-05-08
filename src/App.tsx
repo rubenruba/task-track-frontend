@@ -4,6 +4,7 @@ import { UserService } from "./services/UserService";
 import { Calendar } from "./views/calendar/calendar";
 import { Login } from "./views/login/login";
 import { Register } from "./views/register/register";
+import { NotFound } from "./views/notFound/notFound";
 
 export const App: FC = () => {
   const userService = new UserService();
@@ -13,8 +14,7 @@ export const App: FC = () => {
     <Routes>
       <Route path="/" element={<Login />} />
       {/* TO DO - Not found page */}
-      <Route path="/404" element={""} />
-      <Route path="*" element={<Navigate replace to="/404" />} />
+      <Route path="*" element={<NotFound />} />
 
       {!userToken && (
         <>
