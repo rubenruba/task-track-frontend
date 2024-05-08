@@ -1,13 +1,13 @@
 @import 'src/sass/variables'
 
 .calendar-day-modal
+    box-sizing: border-box
     position: absolute
     top: 50%
     left: 50%
     transform: translate(-50%, -50%)
     outline: none
-    min-width: 400px
-    max-width: 1000px
+    width: 300px
     background-color: $white
     border-radius: 15px
     padding: 25px
@@ -27,4 +27,8 @@
             &:focus
                 border: 2px solid $darkBlue
                 outline: none
-            
+
+// Tablet and desktop styles
+@media screen and (min-width: 576px)
+    .calendar-day-modal
+        width: 500px

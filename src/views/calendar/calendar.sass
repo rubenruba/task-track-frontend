@@ -1,12 +1,12 @@
 @import 'src/sass/variables'
 
+// Mobile first styles
 .calendar-section 
     display: flex
-    flex-direction: row
+    flex-direction: column
     color: $darkBlue
     .calendar-container
-        padding: 50px
-        width: 100%
+        padding: 5px
         .calendar-month
             display: flex
             justify-content: center
@@ -16,6 +16,23 @@
         .calendar-days
             display: grid
             grid-template-columns: repeat(7, 14.29%)
-            grid-template-rows: repeat(5, 150px)
+            grid-template-rows: repeat(5, 135px)
             border: 2px solid $normalBlue
             border-radius: 25px
+
+// Tablet styles
+@media screen and (min-width: 576px)
+    .calendar-container
+        padding: 25px !important
+        .calendar-days
+            grid-template-rows: repeat(5, 150px) !important
+
+// Desktop styles
+@media screen and (min-width: 992px)
+    .calendar-section 
+        flex-direction: row
+        .calendar-container
+            padding: 50px
+            width: 100%
+            .calendar-days
+                grid-template-rows: repeat(5, 150px)

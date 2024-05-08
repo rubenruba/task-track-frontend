@@ -1,26 +1,65 @@
 @import 'src/sass/variables'
 
 nav
-    display: flex
-    flex-direction: column
-    justify-content: space-between
-    box-sizing: border-box
-    max-width: 250px
-    height: 100vh
-    padding: 25px
-    border-right: 2px solid $lightBlue
+    padding: 10px 25px
+    border-bottom: 2px solid $lightBlue
     background-color: $white
-    ul
-        list-style: none
-        padding: 0
-    img
-        width: 150px
-    .nav-username
-        display: flex
+    display: flex
+    align-items: center
+    justify-content: space-between
+    position: sticky
+    top: 0
+    .mobile-logo
+        width: 50px
+    .menu-container
+        position: absolute
+        top: 50px
+        left: 0
+        display: none
+        flex-direction: column
         justify-content: space-between
-        align-items: center
-        p
-            text-overflow: ellipsis
-            overflow: hidden
-            white-space: nowrap
-            width: 80%
+        height: calc( 100vh - 50px )
+        background-color: $white
+        width: 100%
+        z-index: 100
+        ul
+            list-style: none
+            padding: 0
+        img
+            display: none
+        .nav-username
+            display: flex
+            justify-content: space-between
+            align-items: center
+            p
+                text-overflow: ellipsis
+                overflow: hidden
+                white-space: nowrap
+                width: 80%
+
+// Tablet styles
+@media screen and (min-width: 576px)
+
+
+// Desktop styles
+@media screen and (min-width: 992px)
+    nav
+        display: block
+        width: auto
+        border: none
+        padding: 0
+        .menu-icon, .mobile-logo
+            display: none
+        .menu-container
+            position: relative
+            top: 0
+            display: flex !important
+            max-width: 250px
+            height: 100vh
+            box-sizing: border-box
+            padding: 25px
+            border-right: 2px solid $lightBlue
+            background-color: $white
+            img
+                display: block
+                width: 150px
