@@ -1,8 +1,13 @@
+import LogoutIcon from '@mui/icons-material/Logout';
 import { FC } from "react";
 import { Link } from "react-router-dom";
+import { UserService } from "../../services/UserService";
 import './menu.sass';
 
 export const MenuComponent: FC = () => {
+    const userService = new UserService();
+    const user = userService.getCurrentUser()?.user;
+    const darkBlue = { color: "#47B4EB", cursor: "pointer" };
 
     return (
         <nav>
@@ -14,7 +19,15 @@ export const MenuComponent: FC = () => {
                     <li><Link to='/register'>Register</Link></li>
                 </ul>
             </div>
-            <p>Username</p>
+
+            <div className='nav-username'>
+                <p>{user?.username}</p>
+                <LogoutIcon 
+                    titleAccess='Logout' 
+                    onClick={userService.logout} 
+                    sx={darkBlue} 
+                />
+            </div>
         </nav>  
     )
 }

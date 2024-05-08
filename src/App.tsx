@@ -1,10 +1,10 @@
 import { FC } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { UserService } from "./services/UserService";
 import { Calendar } from "./views/calendar/calendar";
 import { Login } from "./views/login/login";
-import { Register } from "./views/register/register";
 import { NotFound } from "./views/notFound/notFound";
+import { Register } from "./views/register/register";
 
 export const App: FC = () => {
   const userService = new UserService();
@@ -13,7 +13,6 @@ export const App: FC = () => {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      {/* TO DO - Not found page */}
       <Route path="*" element={<NotFound />} />
 
       {!userToken && (
