@@ -1,21 +1,21 @@
 @import 'src/sass/variables'
 
-.calendar-day 
+.calendar-day
     background-color: $white
     border: 1px solid $normalBlue
     cursor: pointer
     padding: 10px
     &:nth-child(1)
-        border-radius: 22px 0 0 0
+        border-radius: 8px 0 0 0
     &:nth-child(7)
-        border-radius: 0 22px 0 0
+        border-radius: 0 8px 0 0
     &:nth-child(29)
-        border-radius: 0 0 0 22px
+        border-radius: 0 0 0 8px
     &:nth-child(35)
-        border-radius: 0 0 22px 0
+        border-radius: 0 0 8px 0
     &:hover
         background-color: $hoverBlue
-    .calendar-day-task 
+    .calendar-day-task
         text-overflow: ellipsis
         overflow: hidden
         white-space: nowrap
@@ -25,3 +25,20 @@
         color: $white
         border-radius: 8px
         margin-bottom: 2px
+
+.no-day
+    background-color: $noDay
+    &:hover
+        background-color: $noDay
+
+// Desktop styles
+@media screen and (min-width: 576px)
+    .calendar-day
+        &:nth-child(1)
+            border-radius: 22px 0 0 0
+        &:nth-child(7)
+            border-radius: 0 22px 0 0
+        &:nth-child(29)
+            border-radius: 0 0 0 22px
+        &:nth-child(35)
+            border-radius: 0 0 22px 0

@@ -31,7 +31,7 @@ export const CalendarDayComponent: FC<CalendarDayProps> = ({ date, user, tasks, 
 
   return (
     <>
-      <div className="calendar-day" onClick={handleOpen}>
+      <div className={`calendar-day ${momentDate?.date() ? '' : 'no-day'}`} onClick={handleOpen}>
         <p>{momentDate?.date()}</p>
         {tasks.map((task, index) => {
           if (index < 3) return <p className="calendar-day-task">{task.text}</p>
