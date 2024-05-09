@@ -35,7 +35,7 @@ export const MenuComponent: FC = () => {
                         </li>
                         <li>
                             <TaskAltIcon sx={listIcons} />
-                            <Link to=''>All Taks</Link>
+                            <Link to=''>All Tasks</Link>
                         </li>
                         <li>
                             <AssignmentIcon sx={listIcons} />

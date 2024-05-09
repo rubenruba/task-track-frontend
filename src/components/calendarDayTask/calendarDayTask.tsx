@@ -1,11 +1,15 @@
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import MoveDownIcon from '@mui/icons-material/MoveDown';
+import { Checkbox, IconButton, Menu, MenuItem } from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import moment from "moment";
 import { FC, useRef, useState } from "react";
 import { TaskModel } from "../../models/task";
-import { Checkbox, IconButton, Menu, MenuItem } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import "./calendarDayTask.sass";
 import { TaskService } from "../../services/TaskService";
+import "./calendarDayTask.sass";
 
 interface DayTaskProps {
   task: TaskModel;
@@ -17,12 +21,14 @@ export const CalendarDayTask: FC<DayTaskProps> = ({ task, editTask, deleteTask }
   const taskService = new TaskService();
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [taskText, setTaskText] = useState(task.text);
+  const [openDate, setOpenDate] = useState(false);
   const open = Boolean(anchor);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const darkBlue = { color: "#014B7A" };
 
   const handleDelete = async () => {
     setAnchor(null);
+    setOpenDate(false)
     deleteTask(task);
     await taskService.deleteTask(task);
   };
@@ -44,6 +50,7 @@ export const CalendarDayTask: FC<DayTaskProps> = ({ task, editTask, deleteTask }
   const inputFocus = () => {
     if (!inputRef.current) return;
     setAnchor(null);
+    setOpenDate(false)
     setTimeout(() => {
       inputRef.current!.disabled = false;
       inputRef.current!.focus();
@@ -71,14 +78,30 @@ export const CalendarDayTask: FC<DayTaskProps> = ({ task, editTask, deleteTask }
         <MoreVertIcon sx={darkBlue} />
       </IconButton>
 
-      <Menu anchorEl={anchor} open={open} onClose={() => setAnchor(null)}>
-        <MenuItem onClick={inputFocus}>
-          <ModeEditIcon sx={darkBlue} />
+      <Menu anchorEl={anchor} open={open} onClose={() => { setAnchor(null); setOpenDate(false) }} >
+        <MenuItem onClick={inputFocus} >
+          <ModeEditIcon sx={darkBlue} /> 
         </MenuItem>
         <MenuItem onClick={handleDelete}>
           <DeleteOutlineIcon sx={darkBlue} />
         </MenuItem>
+        <MenuItem onClick={() => setOpenDate(true)}>
+          <MoveDownIcon sx={darkBlue} />
+        </MenuItem>
       </Menu>
+
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <DatePicker
+          slots={{ field: 'br' }}
+          open={openDate}
+          value={moment(task.date)}
+          onChange={(dat) => {
+            if (!dat) return;
+            task.date = dat.format('YYYY-MM-DD');
+            handleEdit();
+          }}
+        />
+      </LocalizationProvider>
     </div>
   );
 };
