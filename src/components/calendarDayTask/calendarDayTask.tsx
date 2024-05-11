@@ -87,21 +87,21 @@ export const CalendarDayTask: FC<DayTaskProps> = ({ task, editTask, deleteTask }
         </MenuItem>
         <MenuItem onClick={() => setOpenDate(true)}>
           <MoveDownIcon sx={darkBlue} />
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <DatePicker
+              className="date-picker"
+              open={openDate}
+              value={moment(task.date)}
+              onChange={(dat) => {
+                if (!dat) return;
+                task.date = dat.format('YYYY-MM-DD');
+                handleEdit();
+              }}
+            />
+          </LocalizationProvider>
         </MenuItem>
       </Menu>
 
-      <LocalizationProvider dateAdapter={AdapterMoment}>
-        <DatePicker
-          slots={{ field: 'br' }}
-          open={openDate}
-          value={moment(task.date)}
-          onChange={(dat) => {
-            if (!dat) return;
-            task.date = dat.format('YYYY-MM-DD');
-            handleEdit();
-          }}
-        />
-      </LocalizationProvider>
     </div>
   );
 };
