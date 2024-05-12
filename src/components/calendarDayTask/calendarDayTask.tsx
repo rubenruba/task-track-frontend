@@ -13,8 +13,8 @@ import "./calendarDayTask.sass";
 
 interface DayTaskProps {
   task: TaskModel;
-  editTask: Function;
-  deleteTask: Function;
+  editTask: (task: TaskModel) => void;
+  deleteTask: (task: TaskModel) => void;
 }
 
 export const CalendarDayTask: FC<DayTaskProps> = ({ task, editTask, deleteTask }) => {

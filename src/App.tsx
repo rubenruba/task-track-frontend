@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Route, Routes } from "react-router-dom";
 import { UserService } from "./services/UserService";
+import { AllTasks } from "./views/allTasks/allTasks";
 import { Calendar } from "./views/calendar/calendar";
 import { Login } from "./views/login/login";
 import { NotFound } from "./views/notFound/notFound";
@@ -25,6 +26,7 @@ export const App: FC = () => {
       {userToken?.user && (
         <>
           <Route path="/calendar" element={<Calendar user={userToken.user} />} />
+          <Route path="/tasks" element={<AllTasks user={userToken.user} />} />
         </>
       )}
     </Routes>

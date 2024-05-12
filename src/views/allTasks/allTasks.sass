@@ -1,0 +1,53 @@
+@import '../../sass/variables'
+
+.tasks-section
+    display: flex
+    flex-direction: column
+    color: $darkBlue
+    .all-tasks-container
+        padding: 15px
+        text-align: center
+        width: 100%
+        box-sizing: border-box
+        .select-tasks
+            color: $darkBlue
+            font-size: 1.5em
+            font-weight: bold
+            div
+                padding: 0 35px
+            fieldset
+                border: none
+        .day-tasks
+            display: flex
+            flex-wrap: wrap
+            justify-content: center
+            gap: 50px
+            margin-top: 15px
+            overflow-y: auto
+            max-height: 82vh 
+            padding: 0 15px
+            box-sizing: border-box
+            &::-webkit-scrollbar
+                width: 5px
+                margin: 10px
+            &::-webkit-scrollbar-track
+                background: $darkBlue
+                border-radius: 10px
+            &::-webkit-scrollbar-thumb
+                background: $normalBlue
+                border-radius: 10px
+                &:hover
+                    background: $lightBlue
+
+// Tablet styles
+@media screen and (min-width: 576px)
+    .select-tasks
+        font-size: 2em !important
+            
+// Desktop styles
+@media screen and (min-width: 992px)
+    .tasks-section
+        flex-direction: row
+        .day-tasks
+            max-height: 86vh !important
+            box-sizing: border-box
