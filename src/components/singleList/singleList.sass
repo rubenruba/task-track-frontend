@@ -1,0 +1,46 @@
+@import 'src/sass/variables'
+
+.list
+    background-color: $white
+    padding: 10px
+    border-radius: 5px
+    border: 1px solid $normalBlue
+    .list-title input
+        width: 75%
+        max-width: 100%
+        text-align: center
+        background: none
+        border: none
+        padding: 5px
+        font-size: 1.1em
+    .task-list
+        display: flex
+        justify-content: space-between
+        align-items: center
+        border: 1px solid transparent
+        border-radius: 5px
+        width: 100%
+        padding: 0 15px
+        box-sizing: border-box
+        div
+            display: flex
+            gap: 5px
+            align-items: center
+        &:hover
+            background-color: $hoverBlue
+            border: 1px solid $lightBlue
+            .delete-task-icon
+                display: block
+        .delete-task-icon
+            cursor: pointer
+            display: none
+
+.add-task-input
+    position: absolute
+    background: $white
+    top: 0
+    left: 0
+    padding: 6px
+    width: 134px
+    box-sizing: border-box
+    font-size: 1em

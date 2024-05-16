@@ -58,8 +58,8 @@ export const CalendarDayModal: FC<ModalProps> = ({ date, open, handleClose, user
   };
 
   return (
-    <Modal open={open} onClose={() => handleClose()}>
-      <div className="calendar-day-modal">
+    <Modal open={open} onClose={() => handleClose()} className="modal-base">
+      <div className="modal-content">
         <h2>{momentDate.format("D MMMM YYYY")}</h2>
         <div className="day-tasks-container">
           {tasks.map((task) => {

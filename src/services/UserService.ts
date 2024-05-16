@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { UserLogin, UserMinimal, UserRegister, UserToken } from "../models/user";
+import { UserEmail, UserLogin, UserMinimal, UserRegister, UserToken } from "../models/user";
 
 export class UserService {
   private baseURL;
@@ -9,7 +9,7 @@ export class UserService {
   }
 
   private async authenticate(url: string, data: UserLogin | UserRegister) {
-    const userToken = (await axios.post(url, data)).data as  UserToken;
+    const userToken = (await axios.post(url, data)).data as UserToken;
     if (!userToken) return;
     this.saveUser(userToken);
     window.location.href = "/calendar";
@@ -54,7 +54,7 @@ export class UserService {
   }
 
   public async getAllEmails() {
-    const emails = await axios.get(`${this.baseURL}/emails`) as string[];
+    const emails = (await axios.get(`${this.baseURL}/emails`)).data as UserEmail[];
     return emails;
   }
 

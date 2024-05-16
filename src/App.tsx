@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { UserService } from "./services/UserService";
 import { AllTasks } from "./views/allTasks/allTasks";
 import { Calendar } from "./views/calendar/calendar";
+import { Lists } from "./views/lists/lists";
 import { Login } from "./views/login/login";
 import { NotFound } from "./views/notFound/notFound";
 import { Register } from "./views/register/register";
@@ -27,6 +28,7 @@ export const App: FC = () => {
         <>
           <Route path="/calendar" element={<Calendar user={userToken.user} />} />
           <Route path="/tasks" element={<AllTasks user={userToken.user} />} />
+          <Route path="/lists" element={<Lists user={userToken.user} />} />
         </>
       )}
     </Routes>

@@ -1,0 +1,19 @@
+@import 'src/sass/variables'
+
+.task-list-user
+    display: flex
+    align-items: center
+    justify-content: space-between
+    border: 1px solid transparent
+    border-radius: 10px
+    margin: 5px 0
+    p
+        padding: 8px
+    &:hover
+        background-color: $hoverBlue
+        border: 1px solid $lightBlue
+        .delete-task-list-user-icon
+            display: block
+    .delete-task-list-user-icon
+        cursor: pointer
+        display: none

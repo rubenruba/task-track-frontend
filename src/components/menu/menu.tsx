@@ -39,7 +39,7 @@ export const MenuComponent: FC = () => {
                         </li>
                         <li>
                             <AssignmentIcon sx={listIcons} />
-                            <Link to=''>Lists</Link>
+                            <Link to='/lists'>Lists</Link>
                         </li>
                     </ul>
                 </div>

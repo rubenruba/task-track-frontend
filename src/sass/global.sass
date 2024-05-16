@@ -42,3 +42,34 @@ button
         min-width: 20vw
         h1
             text-align: center
+
+.modal-base 
+    display: flex
+    align-items: center
+    justify-content: center
+    .modal-content
+        width: 300px
+        background-color: $white
+        border-radius: 15px
+        padding: 25px
+        color: $darkBlue  
+        outline: none
+        h2
+            text-align: center 
+            margin-bottom: 10px 
+
+::-webkit-scrollbar
+    width: 5px
+    margin: 10px
+::-webkit-scrollbar-track
+    background: $darkBlue
+    border-radius: 10px
+::-webkit-scrollbar-thumb
+    background: $normalBlue
+    border-radius: 10px
+    &:hover
+        background: $lightBlue
+
+@media screen and (min-width: 576px)
+    .modal-content
+        width: 500px !important

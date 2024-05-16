@@ -24,3 +24,8 @@ export interface UserRegister {
   username: string;
   password: string;
 }
+
+export interface UserEmail {
+  userId: string;
+  email: string;
+}
