@@ -20,7 +20,7 @@ export const Register: FC = () => {
     }));
   };
 
-  const registerAction = (e: FormEvent) => {
+  const registerAction = async (e: FormEvent) => {
     e.preventDefault();
     if (value.password !== value.repeatPassword) return;
     const user: UserRegister = {
@@ -28,7 +28,7 @@ export const Register: FC = () => {
       email: value.email,
       password: value.password,
     }
-    userService.register(user);
+    await userService.register(user);
   }
 
   return (

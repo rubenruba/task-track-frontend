@@ -17,9 +17,9 @@ export const Login: FC = () => {
     }));
   };
 
-  const loginAction = (e: FormEvent) => {
+  const loginAction = async (e: FormEvent) => {
     e.preventDefault();
-    userService.login({ email: value.email, password: value.password });
+    await userService.login({ email: value.email, password: value.password });
   }
 
   return (
@@ -38,7 +38,7 @@ export const Login: FC = () => {
           type="password"
           updateValue={updateValue}
         />
-        <Link to="/login">Forget password?</Link>
+        <Link to="/reset-password">Forget password?</Link>
         <Link to="/register">Don't have an account? Register now</Link>
         <button onClick={(e) => loginAction(e)}>Login</button>
       </form>

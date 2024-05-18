@@ -8,13 +8,6 @@ export class UserService {
     this.baseURL = `${process.env.REACT_APP_API_URL}/user`;
   }
 
-  private async authenticate(url: string, data: UserLogin | UserRegister) {
-    const userToken = (await axios.post(url, data)).data as UserToken;
-    if (!userToken) return;
-    this.saveUser(userToken);
-    window.location.href = "/calendar";
-  }
-
   private async getUserBy(url: string) {
     try {
       const userToken = this.getCurrentUser();
@@ -28,12 +21,28 @@ export class UserService {
     }
   }
 
-  public login(user: UserLogin) {
-    this.authenticate(`${this.baseURL}/login`, user);
+  public async login(user: UserLogin) {
+    const userToken = (await axios.post(`${this.baseURL}/login`, user)).data as UserToken;
+    if (!userToken) return;
+    this.saveUser(userToken);
+    window.location.href = "/calendar";
   }
 
-  public register(user: UserRegister) {
-    this.authenticate(`${this.baseURL}/register`, user);
+  public async verifyEmail(userId: string, verifyToken: string) {
+    const userToken = (await axios.get(`${this.baseURL}/verify/${userId}/${verifyToken}`)).data as UserToken;
+    if (!userToken) return;
+    this.saveUser(userToken);
+    setTimeout(() => { window.location.href = "/calendar" }, 5000);
+  }
+
+  public async register(user: UserRegister) {
+    await axios.post(`${this.baseURL}/register`, user);
+    window.location.href = "/verify";
+  }
+  
+  public async resetPassword(email: string) {
+    await axios.post(`${this.baseURL}/reset-password`, { email: email });
+    window.location.href = '/login';
   }
 
   public getUserById(userId: string) {
@@ -91,5 +100,9 @@ export class UserService {
 
   public unauthorized(err: AxiosError) {
     if (err.response?.status === 401) this.logout();
+  }
+
+  public async activeAccount(userId: string) {
+    return (await axios.get(`${this.baseURL}/active-account/${userId}`)).data;
   }
 }
