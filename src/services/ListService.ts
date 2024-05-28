@@ -11,20 +11,20 @@ export class ListService {
   constructor() {
     this.baseURL = `${process.env.REACT_APP_API_URL}/list`;
     this.user = this.userService.getCurrentUser()?.user;
-    this.token = this.userService.getCurrentUser()?.token;
+    this.token = this.userService.getUserToken();
   }
 
   private async getLists(url: string): Promise<ListModel[] | void> {
     try {
-      if (!this.token || !this.user) return; 
+      if (!this.token || !this.user) return;
       const lists = await axios.get(url, {
-          headers: { Authorization: this.token }
+        headers: { Authorization: this.token }
       });
       return lists.data as ListModel[];
     } catch (err) {
       this.userService.unauthorized(err as AxiosError);
     }
-  } 
+  }
 
   public async getListById(listId: string) {
     return this.getLists(`${this.baseURL}/${listId}`);
@@ -66,6 +66,4 @@ export class ListService {
       this.userService.unauthorized(err as AxiosError);
     }
   }
-
-
 }

@@ -1,8 +1,3 @@
-export interface UserToken {
-  token: string;
-  user: UserMinimal;
-}
-
 export interface UserMinimal {
   id: string;
   username: string;
@@ -28,4 +23,10 @@ export interface UserRegister {
 export interface UserEmail {
   userId: string;
   email: string;
+}
+
+export interface UserDecoded {
+  user: UserMinimal;
+  iat: number;
+  exp: number;
 }

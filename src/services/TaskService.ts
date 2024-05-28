@@ -11,20 +11,20 @@ export class TaskService {
   constructor() {
     this.baseURL = `${process.env.REACT_APP_API_URL}/task`;
     this.user = this.userService.getCurrentUser()?.user;
-    this.token = this.userService.getCurrentUser()?.token;
+    this.token = this.userService.getUserToken();
   }
 
   private async getTasks(url: string): Promise<TaskModel[] | void> {
     try {
-      if (!this.token || !this.user) return; 
+      if (!this.token || !this.user) return;
       const tasks = await axios.get(url, {
-          headers: { Authorization: this.token }
+        headers: { Authorization: this.token }
       });
       return tasks.data as TaskModel[];
     } catch (err) {
       this.userService.unauthorized(err as AxiosError);
     }
-  } 
+  }
 
   public async getTaskById(taskId: string) {
     return this.getTasks(`${this.baseURL}/${taskId}`);
@@ -70,6 +70,4 @@ export class TaskService {
       this.userService.unauthorized(err as AxiosError);
     }
   }
-
-
 }

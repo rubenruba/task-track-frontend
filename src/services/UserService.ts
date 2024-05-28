@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { UserEmail, UserLogin, UserMinimal, UserRegister, UserToken } from "../models/user";
+import { UserDecoded, UserEmail, UserLogin, UserMinimal, UserRegister } from "../models/user";
 
 export class UserService {
   private baseURL;
@@ -9,27 +9,23 @@ export class UserService {
   }
 
   private async getUserBy(url: string) {
-    try {
-      const userToken = this.getCurrentUser();
-      if (!userToken) return null;
-      const user = await axios.get(url, {
-        headers: { Authorization: userToken.token },
-      }) as UserMinimal;
-      return user;
-    } catch (err) {
-
-    }
+    const userToken = this.getUserToken();
+    if (!userToken) return null;
+    const user = await axios.get(url, {
+      headers: { Authorization: userToken },
+    }) as UserMinimal;
+    return user;
   }
 
   public async login(user: UserLogin) {
-    const userToken = (await axios.post(`${this.baseURL}/login`, user)).data as UserToken;
+    const userToken = (await axios.post(`${this.baseURL}/login`, user)).data;
     if (!userToken) return;
     this.saveUser(userToken);
     window.location.href = "/calendar";
   }
 
   public async verifyEmail(userId: string, verifyToken: string) {
-    const userToken = (await axios.get(`${this.baseURL}/verify/${userId}/${verifyToken}`)).data as UserToken;
+    const userToken = (await axios.get(`${this.baseURL}/verify/${userId}/${verifyToken}`)).data;
     if (!userToken) return;
     this.saveUser(userToken);
     setTimeout(() => { window.location.href = "/calendar" }, 5000);
@@ -39,7 +35,7 @@ export class UserService {
     await axios.post(`${this.baseURL}/register`, user);
     window.location.href = "/verify";
   }
-  
+
   public async resetPassword(email: string) {
     await axios.post(`${this.baseURL}/reset-password`, { email: email });
     window.location.href = '/login';
@@ -54,10 +50,10 @@ export class UserService {
   }
 
   public async getAllUsers() {
-    const userToken = this.getCurrentUser();
-    if (!userToken || userToken?.user.admin === false) return null;
+    const userToken = this.getUserToken();
+    if (!userToken || this.decodeToken(userToken)?.user.admin === false) return null;
     const users = await axios.get(`${this.baseURL}/all`, {
-      headers: { Authorization: userToken.token },
+      headers: { Authorization: userToken },
     }) as UserMinimal[];
     return users;
   }
@@ -68,33 +64,27 @@ export class UserService {
   }
 
   public async deleteUser(userId: string) {
-    const userToken = this.getCurrentUser();
-    if (!userToken || userToken?.user.admin === false) return;
+    const userToken = this.getUserToken();
+    if (!userToken || this.decodeToken(userToken)?.user.admin === false) return;
     await axios.delete(`${this.baseURL}/${userId}`, {
-      headers: { Authorization: userToken.token },
+      headers: { Authorization: userToken },
     });
   }
 
   public async updateUser(user: UserMinimal) {
-    const userToken = this.getCurrentUser();
+    const userToken = this.getUserToken();
     if (!userToken) return;
     await axios.put(this.baseURL, user, {
-      headers: { Authorization: userToken.token },
+      headers: { Authorization: userToken },
     });
   }
 
-  private saveUser(user: UserToken) {
-    localStorage.setItem("user", JSON.stringify(user));
-  }
-
-  public getCurrentUser(): UserToken | null {
-    const user = localStorage.getItem("user");
-    if (!user) return null;
-    return JSON.parse(user);
+  private saveUser(userToken: string) {
+    localStorage.setItem("token", JSON.stringify(userToken));
   }
 
   public logout() {
-    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     window.location.href = '/login';
   }
 
@@ -104,5 +94,26 @@ export class UserService {
 
   public async activeAccount(userId: string) {
     return (await axios.get(`${this.baseURL}/active-account/${userId}`)).data;
+  }
+
+  public getUserToken(): string | null {
+    const userToken = localStorage.getItem("token");
+    if (!userToken) return null;
+    return JSON.parse(userToken);
+  }
+
+  private decodeToken(token: string | null): UserDecoded | null {
+    if (!token) return null;
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace('-', '+').replace('_', '/');
+
+    return JSON.parse(atob(base64));
+  };
+
+  public getCurrentUser(): UserDecoded | null {
+    const userDecoded = this.decodeToken(this.getUserToken());
+    if (!userDecoded) return null;
+    if (userDecoded && (new Date().getTime() > userDecoded.exp * 1000)) return null;
+    else return userDecoded;
   }
 }

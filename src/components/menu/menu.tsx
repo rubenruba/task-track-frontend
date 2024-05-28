@@ -10,7 +10,7 @@ import './menu.sass';
 
 export const MenuComponent: FC = () => {
     const userService = new UserService();
-    const user = userService.getCurrentUser()?.user;
+    const userDecoded = userService.getCurrentUser();
     const menuRef = useRef<HTMLDivElement | null>(null);
     const actionIcons = { color: "#47B4EB", cursor: "pointer" };
     const listIcons = { color: '#0197F6', marginRight: '10px' }
@@ -24,10 +24,10 @@ export const MenuComponent: FC = () => {
     return (
         <nav>
             <MenuIcon className='menu-icon' onClick={openMenu} sx={actionIcons} />
-            <img src={require('../../assets/logo.png')} alt="logo" className='mobile-logo' /> 
+            <img src={require('../../assets/logo.png')} alt="logo" className='mobile-logo' />
             <div className='menu-container' ref={menuRef}>
                 <div>
-                    <img src={require('../../assets/logo.png')} alt="logo" /> 
+                    <img src={require('../../assets/logo.png')} alt="logo" style={{ borderRadius: '5px', border: '3px solid #0197F6' }} />
                     <ul>
                         <li>
                             <CalendarMonthIcon sx={listIcons} />
@@ -45,14 +45,14 @@ export const MenuComponent: FC = () => {
                 </div>
 
                 <div className='nav-username'>
-                    <p>{user?.username}</p>
-                    <LogoutIcon 
-                        titleAccess='Logout' 
-                        onClick={userService.logout} 
-                        sx={actionIcons} 
+                    <p>{userDecoded?.user.username}</p>
+                    <LogoutIcon
+                        titleAccess='Logout'
+                        onClick={userService.logout}
+                        sx={actionIcons}
                     />
                 </div>
             </div>
-        </nav>  
+        </nav>
     )
 }

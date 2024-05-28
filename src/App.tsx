@@ -13,22 +13,22 @@ import { VerifyEmail } from "./views/verifyEmail/verifyEmail";
 export const App: FC = () => {
   const [active, setActive] = useState(false);
   const userService = new UserService();
-  const userToken = userService.getCurrentUser();
+  const userDecoded = userService.getCurrentUser();
 
   useEffect(() => {
     const active = async () => {
-      if (!userToken) return;
-      setActive(await userService.activeAccount(userToken.user.id));
+      if (!userDecoded) return;
+      setActive(await userService.activeAccount(userDecoded.user.id));
     }
     active();
-  }, [userToken]);
+  }, [userDecoded]);
 
   return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="*" element={<NotFound />} />
 
-      {!userToken && (
+      {!userDecoded && (
         <>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -37,11 +37,11 @@ export const App: FC = () => {
         </>
       )}
 
-      {userToken?.user && active && (
+      {userDecoded?.user && active && (
         <>
-          <Route path="/calendar" element={<Calendar user={userToken.user} />} />
-          <Route path="/tasks" element={<AllTasks user={userToken.user} />} />
-          <Route path="/lists" element={<Lists user={userToken.user} />} />
+          <Route path="/calendar" element={<Calendar user={userDecoded.user} />} />
+          <Route path="/tasks" element={<AllTasks user={userDecoded.user} />} />
+          <Route path="/lists" element={<Lists user={userDecoded.user} />} />
         </>
       )}
     </Routes>

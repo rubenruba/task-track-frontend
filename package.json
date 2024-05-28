@@ -25,7 +25,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "type-check": "tsc --pretty --noEmit"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
